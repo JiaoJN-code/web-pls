@@ -2,8 +2,8 @@ import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
 const DASHBOARD: AppRouteRecordRaw = {
-  path: '/personalCenter',
-  name: 'personalCenter',
+  path: '/user',
+  name: 'user',
   component: DEFAULT_LAYOUT,
   meta: {
     locale: '个人中心',
@@ -15,7 +15,7 @@ const DASHBOARD: AppRouteRecordRaw = {
     {
       path: 'setting',
       name: 'setting',
-      component: () => import('@/views/personalCenter/setting/index.vue'),
+      component: () => import('@/views/user/setting/index.vue'),
       meta: {
         locale: '用户设置',
         requiresAuth: true,

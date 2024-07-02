@@ -25,3 +25,7 @@ export function getUserInfo() {
 export function getMenuList() {
   return axios.post<RouteRecordNormalized[]>('/api/user/menu');
 }
+
+export function updateAvatar(data: FormData) {
+  return axios.post<string>('/api/user/updateAvatar', data);
+}
