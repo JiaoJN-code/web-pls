@@ -10,6 +10,12 @@ export default mergeConfig(
       fs: {
         strict: true,
       },
+      proxy: { // 跨域代理
+        '/api': {
+          target: 'http://127.0.0.1:9527',
+          changeOrigin: true, // 允许跨域
+        },
+      },
     },
     plugins: [
       eslint({

@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">登录 Arco Design Pro</div>
-    <div class="login-form-sub-title">登录 Arco Design Pro</div>
+    <div class="login-form-title">个性化学习平台</div>
+    <div class="login-form-sub-title">登录个性化学习平台</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginForm"
@@ -11,31 +11,24 @@
       @submit="handleSubmit"
     >
       <a-form-item
-        field="username"
+        field="userAccount"
         :rules="[{ required: true, message: '用户名不能为空' }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
-        <a-input
-          v-model="userInfo.username"
-          placeholder="用户名：admin"
-        >
+        <a-input v-model="userInfo.userAccount">
           <template #prefix>
             <icon-user />
           </template>
         </a-input>
       </a-form-item>
       <a-form-item
-        field="password"
+        field="userPassword"
         :rules="[{ required: true, message: '密码不能为空' }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
-        <a-input-password
-          v-model="userInfo.password"
-          placeholder="密码：admin"
-          allow-clear
-        >
+        <a-input-password v-model="userInfo.userPassword" allow-clear>
           <template #prefix>
             <icon-lock />
           </template>
@@ -45,10 +38,10 @@
         <div class="login-form-password-actions">
           <a-checkbox
             checked="rememberPassword"
-            :model-value="loginConfig.rememberPassword"
+            :model-value="userInfo.rememberPassword"
             @change="setRememberPassword as any"
           >
-           记住密码
+            记住密码
           </a-checkbox>
           <a-link> 忘记密码 </a-link>
         </div>
@@ -68,7 +61,6 @@
   import { useRouter } from 'vue-router';
   import { Message } from '@arco-design/web-vue';
   import { ValidatedError } from '@arco-design/web-vue/es/form/interface';
-  import { useStorage } from '@vueuse/core';
   import { useUserStore } from '@/store';
   import useLoading from '@/hooks/loading';
   import type { LoginData } from '@/api/user';
@@ -78,14 +70,10 @@
   const { loading, setLoading } = useLoading();
   const userStore = useUserStore();
 
-  const loginConfig = useStorage('login-config', {
-    rememberPassword: true,
-    username: 'admin', // 演示默认值
-    password: 'admin', // demo default value
-  });
   const userInfo = reactive({
-    username: loginConfig.value.username,
-    password: loginConfig.value.password,
+    userAccount: '',
+    userPassword: '',
+    rememberPassword: true,
   });
 
   const handleSubmit = async ({
@@ -108,12 +96,6 @@
           },
         });
         Message.success('欢迎使用');
-        const { rememberPassword } = loginConfig.value;
-        const { username, password } = values;
-        // 实际生产环境需要进行加密存储。
-        // The actual production environment requires encrypted storage.
-        loginConfig.value.username = rememberPassword ? username : '';
-        loginConfig.value.password = rememberPassword ? password : '';
       } catch (err) {
         errorMessage.value = (err as Error).message;
       } finally {
@@ -122,7 +104,7 @@
     }
   };
   const setRememberPassword = (value: boolean) => {
-    loginConfig.value.rememberPassword = value;
+    userInfo.rememberPassword = value;
   };
 </script>
 

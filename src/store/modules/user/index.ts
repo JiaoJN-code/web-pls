@@ -11,24 +11,7 @@ import { UserState } from './types';
 import useAppStore from '../app';
 
 const useUserStore = defineStore('user', {
-  state: (): UserState => ({
-    name: undefined,
-    avatar: undefined,
-    job: undefined,
-    organization: undefined,
-    location: undefined,
-    email: undefined,
-    introduction: undefined,
-    personalWebsite: undefined,
-    jobName: undefined,
-    organizationName: undefined,
-    locationName: undefined,
-    phone: undefined,
-    registrationDate: undefined,
-    accountId: undefined,
-    certification: undefined,
-    role: '',
-  }),
+  state: (): UserState => ({}),
 
   getters: {
     userInfo(state: UserState): UserState {
@@ -39,7 +22,7 @@ const useUserStore = defineStore('user', {
   actions: {
     switchRoles() {
       return new Promise((resolve) => {
-        this.role = this.role === 'user' ? 'admin' : 'user';
+        this.role = this.role === 'student' ? 'admin' : 'student';
         resolve(this.role);
       });
     },
@@ -56,7 +39,6 @@ const useUserStore = defineStore('user', {
     // Get user's information
     async info() {
       const res = await getUserInfo();
-
       this.setInfo(res.data);
     },
 
@@ -64,7 +46,7 @@ const useUserStore = defineStore('user', {
     async login(loginForm: LoginData) {
       try {
         const res = await userLogin(loginForm);
-        setToken(res.data.token);
+        setToken(res.data);
       } catch (err) {
         clearToken();
         throw err;

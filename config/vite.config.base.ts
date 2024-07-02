@@ -23,10 +23,6 @@ export default defineConfig({
         replacement: resolve(__dirname, '../src/assets'),
       },
       {
-        find: 'vue-i18n',
-        replacement: 'vue-i18n/dist/vue-i18n.cjs.js', // Resolve the i18n warning issue
-      },
-      {
         find: 'vue',
         replacement: 'vue/dist/vue.esm-bundler.js', // compile template
       },
@@ -34,7 +30,8 @@ export default defineConfig({
     extensions: ['.ts', '.js'],
   },
   define: {
-    'process.env': {},
+    'process.env': {}, 
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true'
   },
   css: {
     preprocessorOptions: {

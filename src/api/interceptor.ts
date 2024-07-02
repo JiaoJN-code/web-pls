@@ -1,12 +1,10 @@
 import axios from 'axios';
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Message, Modal } from '@arco-design/web-vue';
-import { useUserStore } from '@/store';
+import { Message } from '@arco-design/web-vue';
 import { getToken } from '@/utils/auth';
 
 export interface HttpResponse<T = unknown> {
-  status: number;
-  msg: string;
+  message: string;
   code: number;
   data: T;
 }
@@ -14,6 +12,8 @@ export interface HttpResponse<T = unknown> {
 if (import.meta.env.VITE_API_BASE_URL) {
   axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 }
+
+axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(
   (config: AxiosRequestConfig) => {
@@ -26,7 +26,7 @@ axios.interceptors.request.use(
       if (!config.headers) {
         config.headers = {};
       }
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `${token}`;
     }
     return config;
   },
@@ -40,30 +40,12 @@ axios.interceptors.response.use(
   (response: AxiosResponse<HttpResponse>) => {
     const res = response.data;
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    if (res.code !== 0) {
       Message.error({
-        content: res.msg || 'Error',
+        content: res.message || 'Error',
         duration: 5 * 1000,
       });
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (
-        [50008, 50012, 50014].includes(res.code) &&
-        response.config.url !== '/api/user/info'
-      ) {
-        Modal.error({
-          title: 'Confirm logout',
-          content:
-            'You have been logged out, you can cancel to stay on this page, or log in again',
-          okText: 'Re-Login',
-          async onOk() {
-            const userStore = useUserStore();
-
-            await userStore.logout();
-            window.location.reload();
-          },
-        });
-      }
-      return Promise.reject(new Error(res.msg || 'Error'));
+      return Promise.reject(new Error(res.message || 'Error'));
     }
     return res;
   },
