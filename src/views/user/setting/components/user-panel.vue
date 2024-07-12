@@ -38,7 +38,7 @@
         <template #value="{ data }">
           <a-space v-if="data.label === '标签'">
             <a-tag
-              v-for="(value, index) in data.value.split(',')"
+              v-for="(value, index) in data.value ? data.value.split(',') : []"
               :key="index"
               color="blue"
               size="small"

@@ -24,29 +24,6 @@
     </div>
     <ul class="right-side">
       <li>
-        <a-tooltip content="搜索">
-          <a-button class="nav-btn" type="outline" :shape="'circle'">
-            <template #icon>
-              <icon-search />
-            </template>
-          </a-button>
-        </a-tooltip>
-      </li>
-      <li>
-        <a-tooltip content="语言">
-          <a-button
-            class="nav-btn"
-            type="outline"
-            :shape="'circle'"
-            @click="setDropDownVisible"
-          >
-            <template #icon>
-              <icon-language />
-            </template>
-          </a-button>
-        </a-tooltip>
-      </li>
-      <li>
         <a-tooltip
           :content="
             theme === 'light' ? '点击切换为暗黑模式' : '点击切换为亮色模式'
@@ -145,7 +122,7 @@
               </a-space>
             </a-doption>
             <a-doption>
-              <a-space @click="$router.push({ name: 'Setting' })">
+              <a-space @click="$router.push({ name: 'setting' })">
                 <icon-settings />
                 <span> 用户设置 </span>
               </a-space>
@@ -177,7 +154,7 @@
   const { logout } = useUser();
   const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
   const avatar = computed(() => {
-    return userStore.avatar;
+    return userStore.$state.userAvatar;
   });
   const theme = computed(() => {
     return appStore.theme;
@@ -202,7 +179,6 @@
     appStore.updateSettings({ globalSettings: true });
   };
   const refBtn = ref();
-  const triggerBtn = ref();
   const setPopoverVisible = () => {
     const event = new MouseEvent('click', {
       view: window,
@@ -213,14 +189,6 @@
   };
   const handleLogout = () => {
     logout();
-  };
-  const setDropDownVisible = () => {
-    const event = new MouseEvent('click', {
-      view: window,
-      bubbles: true,
-      cancelable: true,
-    });
-    triggerBtn.value.dispatchEvent(event);
   };
   const switchRoles = async () => {
     const res = await userStore.switchRoles();

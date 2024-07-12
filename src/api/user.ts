@@ -7,6 +7,26 @@ export interface LoginData {
   userPassword: string;
 }
 
+/**
+ * 用户修改基本信息
+ */
+export interface BasicInformation {
+  userAccount?: string;
+  userEmail?: string;
+  userMobile?: string;
+  realName?: string;
+  tag?: string;
+}
+
+/**
+ * 修改密码
+ */
+export interface UpdatePassword {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 export interface LoginRes {
   token: string;
 }
@@ -28,4 +48,16 @@ export function getMenuList() {
 
 export function updateAvatar(data: FormData) {
   return axios.post<string>('/api/user/updateAvatar', data);
+}
+
+export function updateBasicInfo(data: BasicInformation) {
+  return axios.post<boolean>('/api/user/updateBasicInfo', data);
+}
+
+export function updatePassword(data: UpdatePassword) {
+  return axios.post<boolean>('/api/user/updatePassword', data);
+}
+
+export function uploadStudentInfo(data: FormData) {
+  return axios.post<boolean>('/api/user/uploadStudentInfo', data);
 }
